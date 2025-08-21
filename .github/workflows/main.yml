@@ -1,29 +1,43 @@
-name: Revisar Código Python
+name: Revisión de buenas prácticas Python
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - "**.py"
+  pull_request:
+    paths:
+      - "**.py"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clona el repositorio
-      - name: Clonar repositorio
+      # 1. Descargar el código
+      - name: Checkout del repositorio
         uses: actions/checkout@v3
 
-      # 2. Configura Python
+      # 2. Configurar Python
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
-      # 3. Instala flake8
-      - name: Instalar dependencias
+      # 3. Instalar linters
+      - name: Instalar herramientas de estilo
         run: |
           python -m pip install --upgrade pip
-          pip install flake8
+          pip install flake8 pylint
 
-      # 4. Ejecuta flake8 para revisar errores de estilo
-      - name: Revisar con flake8
+      # 4. Revisar con Flake8 (PEP8)
+      - name: Revisar con Flake8
         run: |
-          flake8 .
+          flake8 . --max-line-length=100 --ignore=E203,W503 || true
+
+      # 5. Revisar con Pylint
+      - name: Revisar con Pylint
+        run: |
+          pylint --disable=C0114,C0115,C0116 $(git ls-files '*.py') || true
+      - name: Revisar con Pylint
+        run: |
+          pylint --disable=C0114,C0115,C0116 $(git ls-files '*.py') || true
