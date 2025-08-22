@@ -50,10 +50,8 @@ while True:
     lower = np.array([18, 50, 50], dtype=np.uint8)
     upper = np.array([35, 255, 255], dtype=np.uint8)
 
-    # Crear máscara
     mask = cv2.inRange(hsv, lower, upper)
 
-    # Encontrar contornos
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     fire_detected = False
